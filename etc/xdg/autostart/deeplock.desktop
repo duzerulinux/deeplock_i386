@@ -1,0 +1,22 @@
+[Desktop Entry]
+Name=DeepLock
+Name[pt_BR]=DeepLock
+Name[pt_PT]=DeepLock
+Comment=Freezing home directory
+Comment[pt_BR]=Congelamento do diretório home
+Comment[pt_PT]=Congelamento do diretório home
+Comment[id]=Kunci folder Home Anda, mirip Deep Freeze pada sistem operasi Windows
+GenericName=Locking the system's got even easier
+GenericName[id]=Locking the system's got even easier
+GenericName[pt_BR]=Bloquear o sistema de ficou ainda mais fácil
+GenericName[pt_PT]=Bloquear o sistema de ficou ainda mais fácil
+Exec=deeplock
+Icon=deeplock
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+StartupNotify=true
+Categories=GNOME;GTK;System;
+
+
+

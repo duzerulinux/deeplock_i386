@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+update-icon-caches /usr/share/icons/hicolor/
+xdg-desktop-menu install --novendor /usr/share/applications/deeplock.desktop
+
+exit 0

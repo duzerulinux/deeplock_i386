@@ -1,0 +1,45 @@
+#!/bin/bash
+
+user=`zenity --title="Desbloquear o sistema" --entry --text="Insira nome de usuário:" --width=300`
+is_all=`cat /etc/rc.local | grep rsync | cut --delimiter=' ' --fields=6 | grep $user | cut --delimiter='/' --fields=3`
+
+cd $HOME
+
+gksudo "echo "Password check""
+if [[ $? != 0 ]]; then
+zenity --error --title="Error" --text="Desculpe, senha errada."
+exit
+fi
+
+if [[ $user = "" ]]; then
+exit
+fi
+
+if [[ $is_all == "" ]]; then
+open_all=true
+zenity --error --title="Error" --text="Possibilidades: \n1. User '$user' não existe\n2. O sistema não está bloqueado para '$user'\n3. O sistema está bloqueado para todos os usuários.\n\nsugestões:\n1. Verifique o nome que introduziu\n2. Verifique o status, escolhendo 'Show status' no menudo DeepLock"
+exit
+else
+open_all=false
+fi
+
+if [ -d "/home/$user" ] && [ $open_all = false ]; then
+grep -v $user /etc/rc.local > ofris_tmp_b
+gksudo "rm /etc/rc.local"
+gksudo "cp ofris_tmp_b /etc/rc.local"
+rm ofris_tmp_b
+else
+show_message=false
+fi
+
+if [ -d /etc/.ofris/$user ] && [ $open_all = false ]; then
+gksudo "rm -r /etc/.ofris/$user"
+show_message=true
+fi
+
+if [ $show_message = true ]; then
+sleep 1
+notify-send "Notificação DeepLock" "O sistema foi desbloqueado para o usuário '$user' ..." --icon=info
+fi
+
+exit

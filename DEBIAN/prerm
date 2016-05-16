@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+xdg-desktop-menu uninstall /usr/share/applications/deeplock.desktop
+
+exit 0

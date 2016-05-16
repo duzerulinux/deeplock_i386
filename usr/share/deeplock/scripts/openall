@@ -1,0 +1,21 @@
+#!/bin/bash
+
+cd $HOME
+
+gksudo "echo "Password check""
+if [[ $? != 0 ]]; then
+zenity --error --title="Error" --text="Desculpe, senha errada."
+exit
+fi
+
+grep -v "sudo rsync -a --delete /etc/" /etc/rc.local > ofris_tmp_b
+gksudo "rm /etc/rc.local"
+gksudo "cp ofris_tmp_b /etc/rc.local"
+rm ofris_tmp_b
+if [ -d /etc/.ofris ]; then
+gksudo "rm -r /etc/.ofris"
+fi
+
+sleep 1
+notify-send "Notificação DeepLock" "O sistema foi desbloqueado para todos os usuários..." --icon=info
+exit

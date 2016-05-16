@@ -1,0 +1,13 @@
+Package: deeplock
+Version: 1.0.2~duzeru
+Architecture: i386
+Maintainer: Claudio A. Silva <claudiosilva@duzeru.org>
+Installed-Size: 180
+Depends: libnotify-bin, zenity, python-all, rsync, python-appindicator
+Section: admin
+Priority: optional
+Homepage: http://duzeru.org
+Description: DeepLock - Bloquear o sistema de ficou muito fácil -
+ DeepLock é um aplicativo de código aberto que pode ser usado para bloqueio do diretório Home
+ É um similar ao Deep Freeze em ambiente Windows. 
+ DeepLock é recomendado para computadores públicos.

@@ -1,0 +1,69 @@
+#!/bin/bash
+
+user=`cat /etc/rc.local | grep rsync | cut --delimiter=' ' --fields=6 | grep $HOME | cut --delimiter='/' --fields=3`
+whoami=""
+is_success=true
+ofris_user=$whoami
+
+cd $HOME
+
+gksudo "echo "Password check""
+if [[ $? != 0 ]]; then
+zenity --error --title="Error" --text="Desculpe, senha errada."
+exit
+fi
+
+grep -v "sudo rsync -a --delete /etc/" /etc/rc.local > ofris_tmp
+set $(wc -l ofris_tmp)
+ofris_orig=$1
+set $(wc -l /etc/rc.local)
+ofris_recnt=$1
+ofris_rst=$[$ofris_recnt-$ofris_orig]
+rm ofris_tmp
+
+if [[ $ofris_rst != 0 ]] && [[ $user == $whoami ]]; then 
+notify-send "Error" "Lamentamos, mas o sistema foi bloqueado para todos os usuarios." --icon=error 
+is_success=false
+fi
+
+if [ $is_success = true ]; then
+grep -v "sudo rsync -a --delete /etc/" /etc/rc.local > ofris_tmp_b
+gksudo "rm /etc/rc.local"
+gksudo "cp ofris_tmp_b /etc/rc.local"
+rm ofris_tmp_b
+fi
+
+if [ -d /etc/.ofris ] && [ $is_success = true ]; then
+gksudo "rm -r /etc/.ofris"
+fi
+
+if [ $is_success = true ]; then
+grep -v "exit 0" /etc/rc.local > ofris_tmp
+echo "sudo rsync -a --delete /etc/.ofris/$ofris_user/ /home/$ofris_user/" >> ofris_tmp
+echo "exit 0" >> ofris_tmp
+gksudo "rm /etc/rc.local"
+gksudo "cp ofris_tmp /etc/rc.local"
+rm ofris_tmp
+fi
+
+if [ $is_success = true ]; then
+if [ -d /etc/.ofris/$ofris_user ]; then
+gksudo "rm -r /etc/.ofris/$ofris_user"
+fi
+if [ -d /etc/.ofris ]; then
+gksudo "rsync -a --delete /home/$ofris_user /etc/.ofris/"
+else
+gksudo "mkdir /etc/.ofris/"
+if [[ $ofris_user != "" ]]; then
+gksudo "mkdir /etc/.ofris/$ofris_user"
+fi
+gksudo "rsync -a --delete /home/$ofris_user /etc/.ofris/"
+fi
+gksudo "chmod +x /etc/rc.local"
+fi
+
+if [ $is_success = true ]; then
+notify-send "Notificação DeepLock" "Bloqueio para todos os usuários concluída com êxito , reinicie o seu computador para fazer efeito ..." --icon=info
+fi
+
+exit

@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+update-icon-caches /usr/share/icons/hicolor/
+
+exit 0

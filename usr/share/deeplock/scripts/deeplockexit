@@ -1,0 +1,24 @@
+#!/bin/bash
+
+gksudo "echo "Password check""
+if [[ $? != 0 ]]; then
+zenity --error --title="Error" --text="Desculpe, senha errada."
+exit
+fi
+
+#busca e retorna todas as linhas dos processos deeplock
+ps fax | grep deeplock | awk '{print $1}' | cat >/tmp/deeplock-exit.txt
+
+#busca e retorna o processo PID do deeplock
+cat /tmp/deeplock-exit.txt
+
+#declara a saida do cut como variável
+var=$(cat /tmp/deeplock-exit.txt)
+rm -Rf /tmp/deeplock-exit.txt
+#mata o processo
+kill -9 $var
+
+#remove o txt
+rm -Rf /tmp/deeplock-exit.txt
+
+#END

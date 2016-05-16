@@ -1,0 +1,112 @@
+#!/usr/bin/env python
+
+#DeepLock aprimored for DuZeru GNU/Linux by Claudio A. Silva <claudiosilva@duzeru.org>
+#under the GNU General Public License (GPL). For details of what this license
+#
+#OFRIS was created by Damar Riyadi (aka hok00age) and is licensed
+#under the GNU General Public License (GPL). For details of what this license
+#means to you, read the License page included in this package.
+#
+#OBS: ao editar nao pode haver acentuacao da lingua portuguesa
+
+import subprocess
+import commands
+import gtk
+import gobject
+import appindicator
+
+#Inicializar appindicator com icone de status
+icon = appindicator.Indicator('deeplock', 'deeplock', appindicator.CATEGORY_APPLICATION_STATUS)
+icon.set_icon('deeplock')
+icon.set_status (appindicator.STATUS_ACTIVE)
+icon.set_attention_icon ('deeplock')
+
+#Inicializar Menu
+menu = gtk.Menu()
+
+kunci_satu = gtk.MenuItem("Bloquear este usuario")
+kunci_tertentu = gtk.MenuItem("Bloquear usuario especifico ...")
+kunci_semua = gtk.MenuItem("Bloquear todos os usuarios")
+buka_satu = gtk.MenuItem("Desbloquear este usuario")
+buka_tertentu = gtk.MenuItem("Desbloquear usuario especifico ...")
+buka_semua = gtk.MenuItem("Desbloquear todos os usuarios")
+status = gtk.MenuItem("Status do sistema")
+tentang = gtk.MenuItem("Sobre")
+exit = gtk.MenuItem("Sair")
+sep = gtk.SeparatorMenuItem()
+sep2 = gtk.SeparatorMenuItem()
+
+#Bloquear este utilizador
+def lockthis(data=None):
+	subprocess.Popen('/usr/share/deeplock/scripts/lockthis', shell=False)
+
+#Bloquear usuario especifico
+def lockcho(data=None):
+	subprocess.Popen('/usr/share/deeplock/scripts/lockcho', shell=False)
+
+#Bloquear todos os usuarios
+def lockall(data=None):
+	subprocess.Popen('/usr/share/deeplock/scripts/lockall', shell=False)
+
+#Desbloqueio para este usuario
+def openthis(data=None):
+	subprocess.Popen('/usr/share/deeplock/scripts/openthis', shell=False)
+
+#Desbloqueio para usuario especifico
+def opencho(data=None):
+	subprocess.Popen('/usr/share/deeplock/scripts/opencho', shell=False)
+
+#desbloqueio "para todos"
+def openall(data=None):
+	subprocess.Popen('/usr/share/deeplock/scripts/openall', shell=False)
+
+#Exibicao "Status" menssagem
+def showstatus(data=None):
+	subprocess.Popen('/usr/share/deeplock/scripts/showstatus', shell=False)
+
+#Abra a janela "Info"
+def opententang(data=None):
+	subprocess.Popen('zenity --title="Sobre" --info --text="Deep Look (Bloqueio Profundo) v1.0.0 \nProjeto DuZeru GNU/Linux\nBloquear seu sistema ficou facil\n\nAutor: Claudio A. Silva (claudiosilva@duzeru.org)\n\n"', shell=True)
+
+#Exibicao "Sair"
+def deeplockexit(data=None):
+	subprocess.Popen('/usr/share/deeplock/scripts/deeplockexit', shell=False)
+
+menu.append(kunci_satu)
+menu.append(kunci_tertentu)
+menu.append(kunci_semua)
+menu.append(sep)
+menu.append(buka_satu)
+menu.append(buka_tertentu)
+menu.append(buka_semua)
+menu.append(sep2)
+menu.append(status)
+menu.append(tentang)
+#menu.append(exit)
+
+tentang.connect("activate", opententang)
+status.connect("activate", showstatus)
+buka_satu.connect("activate", openthis)
+buka_tertentu.connect("activate", opencho)
+buka_semua.connect("activate", openall)
+kunci_satu.connect("activate", lockthis)
+kunci_tertentu.connect("activate", lockcho)
+kunci_semua.connect("activate", lockall)
+exit.connect("activate", deeplockexit)
+
+# Menu do programa
+kunci_satu.show()
+kunci_tertentu.show()
+kunci_semua.show()
+sep.show()
+buka_satu.show()
+buka_tertentu.show()
+buka_semua.show()
+sep2.show()
+status.show()
+tentang.show()
+exit.show()
+
+icon.set_menu(menu)
+
+gtk.main()
